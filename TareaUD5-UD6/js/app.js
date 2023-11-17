@@ -255,17 +255,5 @@ function reiniciarJuego() {
 }
 
 function moverSerpientes() {
-  setInterval(() => {
-    const serpientes1 = document.querySelectorAll(".serpiente1");
-    serpientes1.forEach((serpiente) => {
-      setTimeout(() => {
-        const posicionActual = serpiente.getAttribute("id");
-        const posicionActualNumero = parseInt(posicionActual.substring(1));
-        const posicionNuevaNumero = posicionActualNumero + 1;
-        const posicionNueva = "c" + posicionNuevaNumero;
-        serpiente.classList.remove("serpiente1");
-        document.querySelector(`#${posicionNueva}`).classList.add("serpiente1");
-      }, 750);
-    });
-  }, 150000);
+  
 }
