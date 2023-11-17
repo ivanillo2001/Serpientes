@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function crearTablero() {
   let contadorPosiciones = -1;
-  const tablero = document.querySelector(".tablero");
+  const tablero = document.querySelector("#table");
   for (let i = 0; i < 10; i++) {
     const fila = document.createElement("tr");
     for (let index = 0; index < 10; index++) {
