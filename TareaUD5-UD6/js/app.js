@@ -34,36 +34,20 @@ function colocarPuertayExploradora() {
 
 function colocarSerpientes() {
   aPosiciones.length=0;
+  let aSerpientes =[];
   for (let i = 0; i < 4; i++) {
-    let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
-    while (aPosiciones.includes(`c${numeroAleatorio}`)) {
-      numeroAleatorio = Math.floor(Math.random() * 97) + 2;
+    for (let j = 1; j < 4; j++) {
+      let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
+      while (aSerpientes.includes(numeroAleatorio)) {
+        numeroAleatorio = Math.floor(Math.random() * 97) + 2;
+      }
+      document.querySelector(`#c${numeroAleatorio}`).classList.add(`serpiente${j}`);
     }
-    aPosiciones.push(`c${numeroAleatorio}`);
-    document.querySelector(`#c${numeroAleatorio}`).classList.add("serpiente1");
-  }
-  for (let i = 0; i < 4; i++) {
-    let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
-    while (aPosiciones.includes(`c${numeroAleatorio}`)) {
-      numeroAleatorio = Math.floor(Math.random() * 97) + 2;
-    }
-    aPosiciones.push(`c${numeroAleatorio}`);
-    document.querySelector(`#c${numeroAleatorio}`).classList.add("serpiente2");
-  }
-  for (let i = 0; i < 4; i++) {
-    let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
-    while (aPosiciones.includes(`c${numeroAleatorio}`)) {
-      numeroAleatorio = Math.floor(Math.random() * 97) + 2;
-    }
-    aPosiciones.push(`c${numeroAleatorio}`);
-    document.querySelector(`#c${numeroAleatorio}`).classList.add("serpiente3");
+    
   }
 }
 
 function comenzarJuego(event) {
-  //declaramos exploradora
-  const exploradora = document.querySelector(".exploradora");
-  console.log(event.key);
   //añadimos eventos de flechas
   if (event.key=="ArrowLeft") {
     moverIzquierda();
