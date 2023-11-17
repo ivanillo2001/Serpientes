@@ -76,9 +76,10 @@ function comenzarJuego(event) {
   if (event.key == "ArrowDown") {
     moverAbajo();
   }
+  // moverSerpientes();
 }
 
-function moverIzquierda(evento) {
+function moverIzquierda() {
   //obtenemos posicion actual
   const explActual = document.querySelector(".exploradora");
   const posicionActual = explActual.getAttribute("id");
@@ -92,16 +93,14 @@ function moverIzquierda(evento) {
     const numPosicionNueva = numPosicionActual - 1;
     const posicionNueva = "c" + numPosicionNueva;
     comprobarVictoria(numPosicionNueva);
+    comprobarChoqueSerpientes(numPosicionNueva);
     //movemos a la exploradora
     explActual.classList.remove("exploradora");
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
   }
-  console.log(object);
-  comprobarVictoria(numPosicionNueva);
-  evento.preventDefault();
 }
 
-function moverDerecha(evento) {
+function moverDerecha() {
   //obtenemos posicion actual
   const explActual = document.querySelector(".exploradora");
   const posicionActual = explActual.getAttribute("id");
@@ -115,15 +114,14 @@ function moverDerecha(evento) {
     const numPosicionNueva = numPosicionActual + 1;
     const posicionNueva = "c" + numPosicionNueva;
     comprobarVictoria(numPosicionNueva);
+    comprobarChoqueSerpientes(numPosicionNueva);
     //movemos a la exploradora
     explActual.classList.remove("exploradora");
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
   }
-  comprobarVictoria(numPosicionNueva);
-  evento.preventDefault();
 }
 
-function moverArriba(evento) {
+function moverArriba() {
   //obtenemos posicion actual
   const explActual = document.querySelector(".exploradora");
   const posicionActual = explActual.getAttribute("id");
@@ -137,15 +135,15 @@ function moverArriba(evento) {
     const numPosicionNueva = numPosicionActual - 10;
     const posicionNueva = "c" + numPosicionNueva;
     comprobarVictoria(numPosicionNueva);
+    // comprobarChoqueSerpientes(numPosicionNueva);
     //movemos a la exploradora
     explActual.classList.remove("exploradora");
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
   }
 
-  evento.preventDefault();
 }
 
-function moverAbajo(evento) {
+function moverAbajo() {
   //obtenemos posicion actual
   const explActual = document.querySelector(".exploradora");
   const posicionActual = explActual.getAttribute("id");
@@ -159,12 +157,12 @@ function moverAbajo(evento) {
     const numPosicionNueva = numPosicionActual + 10;
     const posicionNueva = "c" + numPosicionNueva;
     comprobarVictoria(numPosicionNueva);
+    // comprobarChoqueSerpientes(numPosicionNueva);
     //movemos a la exploradora
     explActual.classList.remove("exploradora");
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
   }
 
-  evento.preventDefault();
 }
 
 /**
@@ -194,6 +192,55 @@ function comprobarVictoria(numPosicionNueva) {
       botonCreado = true;
     }
   }
+}
+
+function comprobarChoqueSerpientes(posicion){
+  let coincide = false;
+  const serpientes1 = document.querySelectorAll(".serpiente1");
+  serpientes1.forEach(serpiente1 => {
+    const posicionSerpiente = serpiente1.getAttribute("id");
+    const numPosicion = parseInt(posicionSerpiente.substring(1));
+    if (numPosicion==posicion) {
+      coincide=true;
+    }
+  });
+  const serpientes2 = document.querySelectorAll(".serpiente2");
+  serpientes2.forEach(serpiente2 => {
+    const posicionSerpiente = serpiente2.getAttribute("id");
+    const numPosicion = parseInt(posicionSerpiente.substring(1));
+    if (numPosicion==posicion) {
+      coincide=true;
+    }
+  });
+  const serpientes3 = document.querySelectorAll(".serpiente3");
+  serpientes3.forEach(serpiente3 => {
+    const posicionSerpiente = serpiente3.getAttribute("id");
+    const numPosicion = parseInt(posicionSerpiente.substring(1));
+    if (numPosicion==posicion) {
+      coincide=true;
+    }
+  });
+  if (coincide) {
+    const puertaActual = document.querySelector(".door_opened");
+    puertaActual.classList.remove("door_opened");
+    puertaActual.classList.add("door_closed");
+    Swal.fire({
+      title: "Has sido deborada por la serpiente!!",
+      imageUrl: "../images/serpienteComiendo.png",
+      imageWidth: 400,
+      imageHeight: 200,
+      imageAlt: "Custom image",
+    });
+    if (botonCreado == false) {
+      const divBoton = document.querySelector("#boton");
+      const boton = document.createElement("button");
+      boton.textContent = "Jugar de nuevo";
+      divBoton.appendChild(boton);
+      boton.addEventListener("click", reiniciarJuego);
+      botonCreado = true;
+    }
+  }
+  
 }
 
 function reiniciarJuego() {
