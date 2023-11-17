@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   crearTablero(); //nada más empezar se crea el tablero
   document.addEventListener("keydown", comenzarJuego);
 });
-
+let botonCreado = false;
 function crearTablero() {
   let contadorPosiciones = -1;
   tabla.appendChild(tablero);
@@ -48,7 +48,6 @@ function colocarSerpientes() {
 }
 
 function borrarSerpientes() {
-  aSerpientes.length = 0;
   const serpientes1 = document.querySelectorAll(".serpiente1");
   serpientes1.forEach((serpiente) => {
     serpiente.classList.remove("serpiente1");
@@ -178,31 +177,33 @@ function comprobarVictoria(numPosicionNueva) {
     const puertaActual = document.querySelector(".door_opened");
     puertaActual.classList.remove("door_opened");
     puertaActual.classList.add("door_closed");
-
     Swal.fire({
-      title: "Quieres repetir?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Sí, quiero repetir",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Vamos!",
-          text: "Animo",
-          icon: "success",
-        });
-        const explActual = document.querySelector(".exploradora");
-        explActual.classList.remove("exploradora");
-        const puertaActual = document.querySelector(".door_closed");
-        puertaActual.classList.remove("door_closed");
-        puertaActual.classList.add("door_opened");
-        borrarSerpientes();
-        colocarSerpientes();
-        colocarPuertayExploradora();
-        comenzarJuego();
-      }
+      title: "Enhorabuena!",
+      text: "Has conseguido llegar a la puerta",
+      imageUrl: "../images/ganadora.png",
+      imageWidth: 400,
+      imageHeight: 200,
+      imageAlt: "Custom image",
     });
+    if (botonCreado == false) {
+      const divBoton = document.querySelector("#boton");
+      const boton = document.createElement("button");
+      boton.textContent = "Jugar de nuevo";
+      divBoton.appendChild(boton);
+      boton.addEventListener("click", reiniciarJuego);
+      botonCreado = true;
+    }
   }
+}
+
+function reiniciarJuego() {
+  const explActual = document.querySelector(".exploradora");
+  explActual.classList.remove("exploradora");
+  const puertaActual = document.querySelector(".door_closed");
+  puertaActual.classList.remove("door_closed");
+  puertaActual.classList.add("door_opened");
+  borrarSerpientes();
+  colocarSerpientes();
+  colocarPuertayExploradora();
+  comenzarJuego();
 }
