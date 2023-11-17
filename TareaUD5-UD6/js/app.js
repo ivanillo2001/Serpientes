@@ -3,9 +3,11 @@
 //declaramos tablero
 const tabla = document.querySelector("#table");
 const tablero = document.createElement("table");
+
+let aSerpientes = [];
 document.addEventListener("DOMContentLoaded", () => {
   crearTablero(); //nada más empezar se crea el tablero
-  document.addEventListener("keydown",comenzarJuego);
+  document.addEventListener("keydown", comenzarJuego);
 });
 
 function crearTablero() {
@@ -32,58 +34,72 @@ function colocarPuertayExploradora() {
 }
 
 function colocarSerpientes() {
-  let aSerpientes =[];
   for (let i = 0; i < 4; i++) {
     for (let j = 1; j < 4; j++) {
       let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
       while (aSerpientes.includes(numeroAleatorio)) {
         numeroAleatorio = Math.floor(Math.random() * 97) + 2;
       }
-      document.querySelector(`#c${numeroAleatorio}`).classList.add(`serpiente${j}`);
+      document
+        .querySelector(`#c${numeroAleatorio}`)
+        .classList.add(`serpiente${j}`);
     }
-    
   }
+}
+
+function borrarSerpientes() {
+  aSerpientes.length = 0;
+  const serpientes1 = document.querySelectorAll(".serpiente1");
+  serpientes1.forEach((serpiente) => {
+    serpiente.classList.remove("serpiente1");
+  });
+  const serpientes2 = document.querySelectorAll(".serpiente2");
+  serpientes2.forEach((serpiente) => {
+    serpiente.classList.remove("serpiente2");
+  });
+  const serpientes3 = document.querySelectorAll(".serpiente3");
+  serpientes3.forEach((serpiente) => {
+    serpiente.classList.remove("serpiente3");
+  });
 }
 
 function comenzarJuego(event) {
   //añadimos eventos de flechas
-  if (event.key=="ArrowLeft") {
+  if (event.key == "ArrowLeft") {
     moverIzquierda();
   }
-  if (event.key=="ArrowRight") {
+  if (event.key == "ArrowRight") {
     moverDerecha();
   }
-  if (event.key=="ArrowUp") {
+  if (event.key == "ArrowUp") {
     moverArriba();
   }
-  if (event.key=="ArrowDown") {
+  if (event.key == "ArrowDown") {
     moverAbajo();
   }
-
 }
 
 function moverIzquierda(evento) {
-    //obtenemos posicion actual
-    const explActual = document.querySelector(".exploradora");
-    const posicionActual = explActual.getAttribute("id");
+  //obtenemos posicion actual
+  const explActual = document.querySelector(".exploradora");
+  const posicionActual = explActual.getAttribute("id");
 
-    //como es una cadena necesitamos obtener el número, por lo que hacemos un substring
-    const numPosicionActual = parseInt(posicionActual.substring(1));
-    //controlamos que no esté en el borde izquierdo
-    if (numPosicionActual%10!==0) {
-      console.log(numPosicionActual);
-      //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
+  //como es una cadena necesitamos obtener el número, por lo que hacemos un substring
+  const numPosicionActual = parseInt(posicionActual.substring(1));
+  //controlamos que no esté en el borde izquierdo
+  if (numPosicionActual % 10 !== 0) {
+    console.log(numPosicionActual);
+    //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
     const numPosicionNueva = numPosicionActual - 1;
     const posicionNueva = "c" + numPosicionNueva;
     comprobarVictoria(numPosicionNueva);
     //movemos a la exploradora
     explActual.classList.remove("exploradora");
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
-
-    }
-    console.log(object);
-    comprobarVictoria(numPosicionNueva);
-    evento.preventDefault();
+  }
+  console.log(object);
+  comprobarVictoria(numPosicionNueva);
+  evento.preventDefault();
 }
 
 function moverDerecha(evento) {
@@ -94,16 +110,15 @@ function moverDerecha(evento) {
   //como es una cadena necesitamos obtener el número, por lo que hacemos un substring
   const numPosicionActual = parseInt(posicionActual.substring(1));
   //controlamos que no esté en el borde izquierdo
-  if (numPosicionActual%10!==9) {
+  if (numPosicionActual % 10 !== 9) {
     console.log(numPosicionActual);
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
-  const numPosicionNueva = numPosicionActual +1;
-  const posicionNueva = "c" + numPosicionNueva;
-  comprobarVictoria(numPosicionNueva);
-  //movemos a la exploradora
-  explActual.classList.remove("exploradora");
-  document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
-
+    const numPosicionNueva = numPosicionActual + 1;
+    const posicionNueva = "c" + numPosicionNueva;
+    comprobarVictoria(numPosicionNueva);
+    //movemos a la exploradora
+    explActual.classList.remove("exploradora");
+    document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
   }
   comprobarVictoria(numPosicionNueva);
   evento.preventDefault();
@@ -117,18 +132,17 @@ function moverArriba(evento) {
   //como es una cadena necesitamos obtener el número, por lo que hacemos un substring
   const numPosicionActual = parseInt(posicionActual.substring(1));
   //controlamos que no esté en el borde izquierdo
-  if (numPosicionActual>=10) {
+  if (numPosicionActual >= 10) {
     console.log(numPosicionActual);
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
-  const numPosicionNueva = numPosicionActual -10;
-  const posicionNueva = "c" + numPosicionNueva;
-  comprobarVictoria(numPosicionNueva);
-  //movemos a la exploradora
-  explActual.classList.remove("exploradora");
-  document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
-
+    const numPosicionNueva = numPosicionActual - 10;
+    const posicionNueva = "c" + numPosicionNueva;
+    comprobarVictoria(numPosicionNueva);
+    //movemos a la exploradora
+    explActual.classList.remove("exploradora");
+    document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
   }
-  
+
   evento.preventDefault();
 }
 
@@ -140,18 +154,17 @@ function moverAbajo(evento) {
   //como es una cadena necesitamos obtener el número, por lo que hacemos un substring
   const numPosicionActual = parseInt(posicionActual.substring(1));
   //controlamos que no esté en el borde izquierdo
-  if (numPosicionActual<90) {
+  if (numPosicionActual < 90) {
     console.log(numPosicionActual);
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
-  const numPosicionNueva = numPosicionActual +10;
-  const posicionNueva = "c" + numPosicionNueva;
-  comprobarVictoria(numPosicionNueva);
-  //movemos a la exploradora
-  explActual.classList.remove("exploradora");
-  document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
-
+    const numPosicionNueva = numPosicionActual + 10;
+    const posicionNueva = "c" + numPosicionNueva;
+    comprobarVictoria(numPosicionNueva);
+    //movemos a la exploradora
+    explActual.classList.remove("exploradora");
+    document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
   }
-  
+
   evento.preventDefault();
 }
 
@@ -160,16 +173,36 @@ function moverAbajo(evento) {
  * la exploradora es la misma que la de la puerta.
  * Si lo es muestra un sweetAlert de que ha conseguido llegar
  */
-function comprobarVictoria(numPosicionNueva){
-  if (numPosicionNueva==0) {
-    Swal.fire({
-      icon: "success",
-      title: "La exploradora ha llegado al destino!",
-      showConfirmButton: false,
-      timer: 1500
-    });
+function comprobarVictoria(numPosicionNueva) {
+  if (numPosicionNueva == 0) {
     const puertaActual = document.querySelector(".door_opened");
     puertaActual.classList.remove("door_opened");
     puertaActual.classList.add("door_closed");
+
+    Swal.fire({
+      title: "Quieres repetir?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Sí, quiero repetir",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: "Vamos!",
+          text: "Animo",
+          icon: "success",
+        });
+        const explActual = document.querySelector(".exploradora");
+        explActual.classList.remove("exploradora");
+        const puertaActual = document.querySelector(".door_closed");
+        puertaActual.classList.remove("door_closed");
+        puertaActual.classList.add("door_opened");
+        borrarSerpientes();
+        colocarSerpientes();
+        colocarPuertayExploradora();
+        comenzarJuego();
+      }
+    });
   }
 }
