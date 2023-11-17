@@ -1,6 +1,5 @@
 "use strict";
 //declaramos el array de las posiciones
-let aPosiciones = [];
 //declaramos tablero
 const tabla = document.querySelector("#table");
 const tablero = document.createElement("table");
@@ -33,7 +32,6 @@ function colocarPuertayExploradora() {
 }
 
 function colocarSerpientes() {
-  aPosiciones.length=0;
   let aSerpientes =[];
   for (let i = 0; i < 4; i++) {
     for (let j = 1; j < 4; j++) {
@@ -77,13 +75,14 @@ function moverIzquierda(evento) {
       //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
     const numPosicionNueva = numPosicionActual - 1;
     const posicionNueva = "c" + numPosicionNueva;
-
+    comprobarVictoria(numPosicionNueva);
     //movemos a la exploradora
     explActual.classList.remove("exploradora");
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
 
     }
-    
+    console.log(object);
+    comprobarVictoria(numPosicionNueva);
     evento.preventDefault();
 }
 
@@ -100,13 +99,13 @@ function moverDerecha(evento) {
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
   const numPosicionNueva = numPosicionActual +1;
   const posicionNueva = "c" + numPosicionNueva;
-
+  comprobarVictoria(numPosicionNueva);
   //movemos a la exploradora
   explActual.classList.remove("exploradora");
   document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
 
   }
-  
+  comprobarVictoria(numPosicionNueva);
   evento.preventDefault();
 }
 
@@ -123,7 +122,7 @@ function moverArriba(evento) {
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
   const numPosicionNueva = numPosicionActual -10;
   const posicionNueva = "c" + numPosicionNueva;
-
+  comprobarVictoria(numPosicionNueva);
   //movemos a la exploradora
   explActual.classList.remove("exploradora");
   document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
@@ -146,7 +145,7 @@ function moverAbajo(evento) {
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
   const numPosicionNueva = numPosicionActual +10;
   const posicionNueva = "c" + numPosicionNueva;
-
+  comprobarVictoria(numPosicionNueva);
   //movemos a la exploradora
   explActual.classList.remove("exploradora");
   document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
@@ -156,3 +155,21 @@ function moverAbajo(evento) {
   evento.preventDefault();
 }
 
+/**
+ * @description Esta función comprueba si la posicion de
+ * la exploradora es la misma que la de la puerta.
+ * Si lo es muestra un sweetAlert de que ha conseguido llegar
+ */
+function comprobarVictoria(numPosicionNueva){
+  if (numPosicionNueva==0) {
+    Swal.fire({
+      icon: "success",
+      title: "La exploradora ha llegado al destino!",
+      showConfirmButton: false,
+      timer: 1500
+    });
+    const puertaActual = document.querySelector(".door_opened");
+    puertaActual.classList.remove("door_opened");
+    puertaActual.classList.add("door_closed");
+  }
+}
