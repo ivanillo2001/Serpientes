@@ -108,7 +108,7 @@ function moverDerecha(evento) {
 
   //como es una cadena necesitamos obtener el número, por lo que hacemos un substring
   const numPosicionActual = parseInt(posicionActual.substring(1));
-  //controlamos que no esté en el borde izquierdo
+  //controlamos que no esté en el borde derecho
   if (numPosicionActual % 10 !== 9) {
     console.log(numPosicionActual);
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
@@ -130,7 +130,7 @@ function moverArriba(evento) {
 
   //como es una cadena necesitamos obtener el número, por lo que hacemos un substring
   const numPosicionActual = parseInt(posicionActual.substring(1));
-  //controlamos que no esté en el borde izquierdo
+  //controlamos que no esté en el borde superior
   if (numPosicionActual >= 10) {
     console.log(numPosicionActual);
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
@@ -152,7 +152,7 @@ function moverAbajo(evento) {
 
   //como es una cadena necesitamos obtener el número, por lo que hacemos un substring
   const numPosicionActual = parseInt(posicionActual.substring(1));
-  //controlamos que no esté en el borde izquierdo
+  //controlamos que no esté en el borde de abajo
   if (numPosicionActual < 90) {
     console.log(numPosicionActual);
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
