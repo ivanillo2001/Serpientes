@@ -90,10 +90,7 @@ button:disabled {
   background-color: #ccc;
   cursor: inherit;
 }
-/* img{
-  width: 35px;
-  height: 35px;
-} */
+
 .exploradora {
   background-image: url("../images/exploradora.png");
   background-repeat: no-repeat;
