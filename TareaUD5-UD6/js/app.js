@@ -3,11 +3,12 @@
 //declaramos tablero
 const tabla = document.querySelector("#table");
 const tablero = document.createElement("table");
-
-let aSerpientes = [];
+let aPosiciones=[];
+let intervaloSerpientes;
 document.addEventListener("DOMContentLoaded", () => {
   crearTablero(); //nada más empezar se crea el tablero
   document.addEventListener("keydown", comenzarJuego);
+  intervaloSerpientes=setInterval(moverSerpientes,1000);
 });
 let botonCreado = false;
 function crearTablero() {
@@ -33,17 +34,34 @@ function colocarPuertayExploradora() {
   document.querySelector("#c99").classList.add("exploradora");
 }
 
+
 function colocarSerpientes() {
   for (let i = 0; i < 4; i++) {
-    for (let j = 1; j < 4; j++) {
-      let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
-      while (aSerpientes.includes(numeroAleatorio)) {
-        numeroAleatorio = Math.floor(Math.random() * 97) + 2;
-      }
-      document
-        .querySelector(`#c${numeroAleatorio}`)
-        .classList.add(`serpiente${j}`);
+    let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
+    while (aPosiciones.includes(`c${numeroAleatorio}`)) {
+      numeroAleatorio = Math.floor(Math.random() * 97) + 2;
     }
+    console.log(`La serpiente 1 estará en la posicion: ${numeroAleatorio}`);
+    aPosiciones.push(`c${numeroAleatorio}`);
+    document.querySelector(`#c${numeroAleatorio}`).classList.add("serpiente1");
+  }
+  for (let i = 0; i < 4; i++) {
+    let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
+    while (aPosiciones.includes(`c${numeroAleatorio}`)) {
+      numeroAleatorio = Math.floor(Math.random() * 97) + 2;
+    }
+    console.log(`La serpiente 2 estará en la posicion: ${numeroAleatorio}`);
+    aPosiciones.push(`c${numeroAleatorio}`);
+    document.querySelector(`#c${numeroAleatorio}`).classList.add("serpiente2");
+  }
+  for (let i = 0; i < 4; i++) {
+    let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
+    while (aPosiciones.includes(`c${numeroAleatorio}`)) {
+      numeroAleatorio = Math.floor(Math.random() * 97) + 2;
+    }
+    console.log(`La serpiente 3 estará en la posicion: ${numeroAleatorio}`);
+    aPosiciones.push(`c${numeroAleatorio}`);
+    document.querySelector(`#c${numeroAleatorio}`).classList.add("serpiente3");
   }
 }
 
@@ -76,7 +94,6 @@ function comenzarJuego(event) {
   if (event.key == "ArrowDown") {
     moverAbajo();
   }
-  moverSerpientes();
 }
 
 function moverIzquierda() {
@@ -93,7 +110,6 @@ function moverIzquierda() {
     const numPosicionNueva = numPosicionActual - 1;
     const posicionNueva = "c" + numPosicionNueva;
     comprobarVictoria(numPosicionNueva);
-    comprobarChoqueSerpientes(numPosicionNueva);
     //movemos a la exploradora
     explActual.classList.remove("exploradora");
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
@@ -114,7 +130,7 @@ function moverDerecha() {
     const numPosicionNueva = numPosicionActual + 1;
     const posicionNueva = "c" + numPosicionNueva;
     comprobarVictoria(numPosicionNueva);
-    comprobarChoqueSerpientes(numPosicionNueva);
+    comprobarChoque();
     //movemos a la exploradora
     explActual.classList.remove("exploradora");
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
@@ -135,7 +151,7 @@ function moverArriba() {
     const numPosicionNueva = numPosicionActual - 10;
     const posicionNueva = "c" + numPosicionNueva;
     comprobarVictoria(numPosicionNueva);
-    // comprobarChoqueSerpientes(numPosicionNueva);
+    comprobarChoque();
     //movemos a la exploradora
     explActual.classList.remove("exploradora");
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
@@ -156,7 +172,7 @@ function moverAbajo() {
     const numPosicionNueva = numPosicionActual + 10;
     const posicionNueva = "c" + numPosicionNueva;
     comprobarVictoria(numPosicionNueva);
-    // comprobarChoqueSerpientes(numPosicionNueva);
+    comprobarChoque();
     //movemos a la exploradora
     explActual.classList.remove("exploradora");
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
@@ -170,6 +186,7 @@ function moverAbajo() {
  */
 function comprobarVictoria(numPosicionNueva) {
   if (numPosicionNueva == 0) {
+    clearInterval(intervaloSerpientes);
     const puertaActual = document.querySelector(".door_opened");
     puertaActual.classList.remove("door_opened");
     puertaActual.classList.add("door_closed");
@@ -192,68 +209,177 @@ function comprobarVictoria(numPosicionNueva) {
   }
 }
 
-function comprobarChoqueSerpientes(posicion) {
-  let coincide = false;
-  const serpientes1 = document.querySelectorAll(".serpiente1");
-  serpientes1.forEach((serpiente1) => {
-    const posicionSerpiente = serpiente1.getAttribute("id");
-    const numPosicion = parseInt(posicionSerpiente.substring(1));
-    if (numPosicion == posicion) {
-      coincide = true;
-    }
-  });
-  const serpientes2 = document.querySelectorAll(".serpiente2");
-  serpientes2.forEach((serpiente2) => {
-    const posicionSerpiente = serpiente2.getAttribute("id");
-    const numPosicion = parseInt(posicionSerpiente.substring(1));
-    if (numPosicion == posicion) {
-      coincide = true;
-    }
-  });
-  const serpientes3 = document.querySelectorAll(".serpiente3");
-  serpientes3.forEach((serpiente3) => {
-    const posicionSerpiente = serpiente3.getAttribute("id");
-    const numPosicion = parseInt(posicionSerpiente.substring(1));
-    if (numPosicion == posicion) {
-      coincide = true;
-    }
-  });
-  if (coincide) {
-    const puertaActual = document.querySelector(".door_opened");
-    puertaActual.classList.remove("door_opened");
-    puertaActual.classList.add("door_closed");
+// function comprobarChoqueSerpientes(numPosicionNueva) {
+//   let coincide = false;
+//   const serpientes1 = document.querySelectorAll(".serpiente1");
+//   serpientes1.forEach((serpiente1) => {
+//     let posicionSerpiente = serpiente1.getAttribute("id");
+//     let numPosicion = parseInt(posicionSerpiente.substring(1));
+//     if (numPosicion == numPosicionNueva) {
+//       coincide = true;
+//     }
+//   });
+//   const serpientes2 = document.querySelectorAll(".serpiente2");
+//   serpientes2.forEach((serpiente2) => {
+//     let posicionSerpiente = serpiente2.getAttribute("id");
+//     let numPosicion = parseInt(posicionSerpiente.substring(1));
+//     if (numPosicion == numPosicionNueva) {
+//       coincide = true;
+//     }
+//   });
+//   const serpientes3 = document.querySelectorAll(".serpiente3");
+//   serpientes3.forEach((serpiente3) => {
+//     let posicionSerpiente = serpiente3.getAttribute("id");
+//     let numPosicion = parseInt(posicionSerpiente.substring(1));
+//     if (numPosicion == numPosicionNueva) {
+//       coincide = true;
+//     }
+//   });
+//   if (coincide) {
+//     const puertaActual = document.querySelector(".door_opened");
+//     puertaActual.classList.remove("door_opened");
+//     puertaActual.classList.add("door_closed");
+//     mensajeErroryBoton();
+//   }
+// }
 
-    Swal.fire({
-      title: "Has sido deborada por la serpiente!!",
-      imageUrl: "../images/serpienteComiendo.png",
-      imageWidth: 400,
-      imageHeight: 200,
-      imageAlt: "Custom image",
-    });
-    if (botonCreado == false) {
-      const divBoton = document.querySelector("#boton");
-      const boton = document.createElement("button");
-      boton.textContent = "Jugar de nuevo";
-      divBoton.appendChild(boton);
-      boton.addEventListener("click", reiniciarJuego);
-      botonCreado = true;
-    }
-  }
-}
 
 function reiniciarJuego() {
+  clearInterval(intervaloSerpientes);
+  borrarSerpientes();
+  colocarSerpientes();
+  // Establecer un nuevo intervalo y almacenar su ID
+  intervaloSerpientes = setInterval(moverSerpientes, 1000);
   const explActual = document.querySelector(".exploradora");
   explActual.classList.remove("exploradora");
   document.querySelector("#c99").classList.add("exploradora");
   const puertaActual = document.querySelector(".door_closed");
   puertaActual.classList.remove("door_closed");
   puertaActual.classList.add("door_opened");
-  borrarSerpientes();
-  colocarSerpientes();
+  
   colocarPuertayExploradora();
   comenzarJuego();
 }
 
 function moverSerpientes() {
-  
+  //creamos los arrays con las diferentes serpientes
+  const serpientes1 = document.querySelectorAll(".serpiente1");
+  const serpientes2 = document.querySelectorAll(".serpiente2");
+  const serpientes3 = document.querySelectorAll(".serpiente3");
+  for (let index = 0; index < 15; index++) {
+    serpientes1.forEach((serpiente1) => {
+      //obtenemos la posicion actual
+      const posicionActual = serpiente1.getAttribute("id");
+      //obtenemos el numero
+      const posicionActualNumero = parseInt(posicionActual.substring(1));
+      //sumamos la posicion 1 a la posicion actual
+      let posicionNuevaNumero = posicionActualNumero + 1;
+      if (posicionNuevaNumero==100) {
+        posicionNuevaNumero=1;
+      }
+      //creamos a cadena
+      const posicionNueva = "c" + posicionNuevaNumero;
+      comprobarChoque();
+      //borramos la clase anterior
+      serpiente1.classList.remove("serpiente1");
+      //añadimos serpiente a la clase nueva
+      document.querySelector(`#${posicionNueva}`).classList.add("serpiente1");
+    });
+    serpientes3.forEach((serpiente) => {
+      //obtenemos la posicion actual
+      const posicionActual = serpiente.getAttribute("id");
+      //obtenemos el numero
+      const posicionActualNumero = parseInt(posicionActual.substring(1));
+      //sumamos la posicion 1 a la posicion actual
+      let posicionNuevaNumero = posicionActualNumero + 1;
+      if (posicionNuevaNumero==100) {
+        posicionNuevaNumero=1;
+      }
+      //creamos a cadena
+      const posicionNueva = "c" + posicionNuevaNumero;
+      comprobarChoque();
+      //borramos la clase anterior
+      serpiente.classList.remove("serpiente3");
+      //añadimos serpiente a la clase nueva
+      document.querySelector(`#${posicionNueva}`).classList.add("serpiente3");
+    });
+    serpientes2.forEach((serpiente) => {
+      //obtenemos la posicion actual
+      const posicionActual = serpiente.getAttribute("id");
+      //obtenemos el numero
+      const posicionActualNumero = parseInt(posicionActual.substring(1));
+      //sumamos la posicion 1 a la posicion actual
+      let posicionNuevaNumero = posicionActualNumero + 10;
+      if (posicionActualNumero==90) {
+        posicionNuevaNumero=10;
+      }
+      if (posicionNuevaNumero>100) {
+        posicionNuevaNumero=(posicionNuevaNumero-100);
+      }
+      //creamos a cadena
+      const posicionNueva = "c" + posicionNuevaNumero;
+      comprobarChoque();
+      //borramos la clase anterior
+      serpiente.classList.remove("serpiente2");
+      //añadimos serpiente a la clase nueva
+      document.querySelector(`#${posicionNueva}`).classList.add("serpiente2");
+    });
+  }
+}
+
+
+function mensajeErroryBoton(){
+  clearInterval(intervaloSerpientes);
+  Swal.fire({
+    title: "Has sido deborada por la serpiente!!",
+    imageUrl: "../images/serpienteComiendo.png",
+    imageWidth: 400,
+    imageHeight: 200,
+    imageAlt: "Custom image",
+  });
+  if (botonCreado == false) {
+    const divBoton = document.querySelector("#boton");
+    const boton = document.createElement("button");
+    boton.textContent = "Jugar de nuevo";
+    divBoton.appendChild(boton);
+    boton.addEventListener("click", reiniciarJuego);
+    botonCreado = true;
+  }
+}
+
+function comprobarChoque() {
+  let explActual = document.querySelector(".exploradora");
+  let posicionActualExpl = explActual.getAttribute("id");
+  let numPosExplo= parseInt(posicionActualExpl.substring(1));
+  let choca = false;
+  const serpientes1 = document.querySelectorAll(".serpiente1");
+  const serpientes2 = document.querySelectorAll(".serpiente2");
+  const serpientes3 = document.querySelectorAll(".serpiente3");
+
+  serpientes1.forEach(serpiente => {
+    let posicion = serpiente.getAttribute("id");
+    let numPosicion = parseInt(posicion.substring(1));
+    if (numPosExplo == numPosicion) {
+      choca= true;
+    }
+  });
+  serpientes2.forEach(serpiente => {
+    let posicion = serpiente.getAttribute("id");
+    let numPosicion = parseInt(posicion.substring(1));
+    if (numPosExplo == numPosicion) {
+      choca= true;
+    }
+  });
+  serpientes3.forEach(serpiente => {
+    let posicion = serpiente.getAttribute("id");
+    let numPosicion = parseInt(posicion.substring(1));
+    if (numPosExplo == numPosicion) {
+      choca= true;
+    }
+  });
+
+  if (choca) {
+    mensajeErroryBoton();
+  }
+
 }
