@@ -3,12 +3,12 @@
 //declaramos tablero
 const tabla = document.querySelector("#table");
 const tablero = document.createElement("table");
-let aPosiciones=[];
+let aPosiciones = [];
 let intervaloSerpientes;
 document.addEventListener("DOMContentLoaded", () => {
   crearTablero(); //nada más empezar se crea el tablero
   document.addEventListener("keydown", comenzarJuego);
-  intervaloSerpientes=setInterval(moverSerpientes,1000);
+  intervaloSerpientes = setInterval(moverSerpientes, 1000);
 });
 let botonCreado = false;
 function crearTablero() {
@@ -33,7 +33,6 @@ function colocarPuertayExploradora() {
   document.querySelector("#c0").classList.add("door_opened");
   document.querySelector("#c99").classList.add("exploradora");
 }
-
 
 function colocarSerpientes() {
   for (let i = 0; i < 4; i++) {
@@ -243,20 +242,18 @@ function comprobarVictoria(numPosicionNueva) {
 //   }
 // }
 
-
 function reiniciarJuego() {
   clearInterval(intervaloSerpientes);
   borrarSerpientes();
   colocarSerpientes();
   // Establecer un nuevo intervalo y almacenar su ID
   intervaloSerpientes = setInterval(moverSerpientes, 1000);
+  //eliminamos la exploradora de donde esté y la colocamos en la celda 99
   const explActual = document.querySelector(".exploradora");
   explActual.classList.remove("exploradora");
-  document.querySelector("#c99").classList.add("exploradora");
+  //quitamos la puerta cerrada
   const puertaActual = document.querySelector(".door_closed");
   puertaActual.classList.remove("door_closed");
-  puertaActual.classList.add("door_opened");
-  
   colocarPuertayExploradora();
   comenzarJuego();
 }
@@ -274,8 +271,8 @@ function moverSerpientes() {
       const posicionActualNumero = parseInt(posicionActual.substring(1));
       //sumamos la posicion 1 a la posicion actual
       let posicionNuevaNumero = posicionActualNumero + 1;
-      if (posicionNuevaNumero==100) {
-        posicionNuevaNumero=1;
+      if (posicionNuevaNumero == 100) {
+        posicionNuevaNumero = 1;
       }
       //creamos a cadena
       const posicionNueva = "c" + posicionNuevaNumero;
@@ -292,8 +289,8 @@ function moverSerpientes() {
       const posicionActualNumero = parseInt(posicionActual.substring(1));
       //sumamos la posicion 1 a la posicion actual
       let posicionNuevaNumero = posicionActualNumero + 1;
-      if (posicionNuevaNumero==100) {
-        posicionNuevaNumero=1;
+      if (posicionNuevaNumero == 100) {
+        posicionNuevaNumero = 1;
       }
       //creamos a cadena
       const posicionNueva = "c" + posicionNuevaNumero;
@@ -310,11 +307,11 @@ function moverSerpientes() {
       const posicionActualNumero = parseInt(posicionActual.substring(1));
       //sumamos la posicion 1 a la posicion actual
       let posicionNuevaNumero = posicionActualNumero + 10;
-      if (posicionActualNumero==90) {
-        posicionNuevaNumero=10;
+      if (posicionActualNumero == 90) {
+        posicionNuevaNumero = 10;
       }
-      if (posicionNuevaNumero>100) {
-        posicionNuevaNumero=(posicionNuevaNumero-100);
+      if (posicionNuevaNumero > 100) {
+        posicionNuevaNumero = posicionNuevaNumero - 100;
       }
       //creamos a cadena
       const posicionNueva = "c" + posicionNuevaNumero;
@@ -327,8 +324,7 @@ function moverSerpientes() {
   }
 }
 
-
-function mensajeErroryBoton(){
+function mensajeErroryBoton() {
   clearInterval(intervaloSerpientes);
   Swal.fire({
     title: "Has sido deborada por la serpiente!!",
@@ -350,36 +346,35 @@ function mensajeErroryBoton(){
 function comprobarChoque() {
   let explActual = document.querySelector(".exploradora");
   let posicionActualExpl = explActual.getAttribute("id");
-  let numPosExplo= parseInt(posicionActualExpl.substring(1));
+  let numPosExplo = parseInt(posicionActualExpl.substring(1));
   let choca = false;
   const serpientes1 = document.querySelectorAll(".serpiente1");
   const serpientes2 = document.querySelectorAll(".serpiente2");
   const serpientes3 = document.querySelectorAll(".serpiente3");
 
-  serpientes1.forEach(serpiente => {
+  serpientes1.forEach((serpiente) => {
     let posicion = serpiente.getAttribute("id");
     let numPosicion = parseInt(posicion.substring(1));
     if (numPosExplo == numPosicion) {
-      choca= true;
+      choca = true;
     }
   });
-  serpientes2.forEach(serpiente => {
+  serpientes2.forEach((serpiente) => {
     let posicion = serpiente.getAttribute("id");
     let numPosicion = parseInt(posicion.substring(1));
     if (numPosExplo == numPosicion) {
-      choca= true;
+      choca = true;
     }
   });
-  serpientes3.forEach(serpiente => {
+  serpientes3.forEach((serpiente) => {
     let posicion = serpiente.getAttribute("id");
     let numPosicion = parseInt(posicion.substring(1));
     if (numPosExplo == numPosicion) {
-      choca= true;
+      choca = true;
     }
   });
 
   if (choca) {
     mensajeErroryBoton();
   }
-
 }
