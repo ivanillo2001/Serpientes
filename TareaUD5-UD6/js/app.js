@@ -3,14 +3,23 @@
 //declaramos tablero
 const tabla = document.querySelector("#table");
 const tablero = document.createElement("table");
+const tiempo = document.querySelector("#time");
 let aPosiciones = [];
 let intervaloSerpientes;
+// let intervaloCronometro;
+let botonCreado = false;
 document.addEventListener("DOMContentLoaded", () => {
   crearTablero(); //nada más empezar se crea el tablero
   document.addEventListener("keydown", comenzarJuego);
   intervaloSerpientes = setInterval(moverSerpientes, 1000);
+  // intervaloCronometro = setInterval(actualizarCuenta,1000);
+
 });
-let botonCreado = false;
+/**
+ * @description Función encargada de crear el tablero y asignar
+ * un id a cada celda, los cuales después se le asignan a la puerta,
+ * serpientes y exploradora
+ */
 function crearTablero() {
   let contadorPosiciones = -1;
   tabla.appendChild(tablero);
@@ -24,6 +33,7 @@ function crearTablero() {
     }
     tablero.appendChild(fila);
   }
+  //colocamos puerta, exploradora y serpientes
   colocarPuertayExploradora();
   colocarSerpientes();
 }
@@ -40,7 +50,6 @@ function colocarSerpientes() {
     while (aPosiciones.includes(`c${numeroAleatorio}`)) {
       numeroAleatorio = Math.floor(Math.random() * 97) + 2;
     }
-    console.log(`La serpiente 1 estará en la posicion: ${numeroAleatorio}`);
     aPosiciones.push(`c${numeroAleatorio}`);
     document.querySelector(`#c${numeroAleatorio}`).classList.add("serpiente1");
   }
@@ -49,7 +58,6 @@ function colocarSerpientes() {
     while (aPosiciones.includes(`c${numeroAleatorio}`)) {
       numeroAleatorio = Math.floor(Math.random() * 97) + 2;
     }
-    console.log(`La serpiente 2 estará en la posicion: ${numeroAleatorio}`);
     aPosiciones.push(`c${numeroAleatorio}`);
     document.querySelector(`#c${numeroAleatorio}`).classList.add("serpiente2");
   }
@@ -58,7 +66,6 @@ function colocarSerpientes() {
     while (aPosiciones.includes(`c${numeroAleatorio}`)) {
       numeroAleatorio = Math.floor(Math.random() * 97) + 2;
     }
-    console.log(`La serpiente 3 estará en la posicion: ${numeroAleatorio}`);
     aPosiciones.push(`c${numeroAleatorio}`);
     document.querySelector(`#c${numeroAleatorio}`).classList.add("serpiente3");
   }
@@ -95,6 +102,9 @@ function comenzarJuego(event) {
   }
 }
 
+/**
+ * @description Funciones de movimiento de exploradora
+ */
 function moverIzquierda() {
   //obtenemos posicion actual
   const explActual = document.querySelector(".exploradora");
@@ -192,7 +202,7 @@ function comprobarVictoria(numPosicionNueva) {
     Swal.fire({
       title: "Enhorabuena!",
       text: "Has conseguido llegar a la puerta",
-      imageUrl: "../images/ganadora.png",
+      imageUrl: "../../TareaUD5-UD6/images/ganadora.png",
       imageWidth: 400,
       imageHeight: 200,
       imageAlt: "Custom image",
@@ -208,52 +218,27 @@ function comprobarVictoria(numPosicionNueva) {
   }
 }
 
-// function comprobarChoqueSerpientes(numPosicionNueva) {
-//   let coincide = false;
-//   const serpientes1 = document.querySelectorAll(".serpiente1");
-//   serpientes1.forEach((serpiente1) => {
-//     let posicionSerpiente = serpiente1.getAttribute("id");
-//     let numPosicion = parseInt(posicionSerpiente.substring(1));
-//     if (numPosicion == numPosicionNueva) {
-//       coincide = true;
-//     }
-//   });
-//   const serpientes2 = document.querySelectorAll(".serpiente2");
-//   serpientes2.forEach((serpiente2) => {
-//     let posicionSerpiente = serpiente2.getAttribute("id");
-//     let numPosicion = parseInt(posicionSerpiente.substring(1));
-//     if (numPosicion == numPosicionNueva) {
-//       coincide = true;
-//     }
-//   });
-//   const serpientes3 = document.querySelectorAll(".serpiente3");
-//   serpientes3.forEach((serpiente3) => {
-//     let posicionSerpiente = serpiente3.getAttribute("id");
-//     let numPosicion = parseInt(posicionSerpiente.substring(1));
-//     if (numPosicion == numPosicionNueva) {
-//       coincide = true;
-//     }
-//   });
-//   if (coincide) {
-//     const puertaActual = document.querySelector(".door_opened");
-//     puertaActual.classList.remove("door_opened");
-//     puertaActual.classList.add("door_closed");
-//     mensajeErroryBoton();
-//   }
-// }
-
+/**
+ * @description Funcion para reiniciar el juego
+ * borrando y añadiendo las clases necesarias
+ */
 function reiniciarJuego() {
+  //eliminamos el intervalo de movimiento de serpientes
   clearInterval(intervaloSerpientes);
+  //quitamos las serpientes de donde están
   borrarSerpientes();
+  //volvemos a colocar las serpientes en sitios aleatorios
   colocarSerpientes();
   // Establecer un nuevo intervalo y almacenar su ID
   intervaloSerpientes = setInterval(moverSerpientes, 1000);
   //eliminamos la exploradora de donde esté y la colocamos en la celda 99
   const explActual = document.querySelector(".exploradora");
   explActual.classList.remove("exploradora");
+  document.querySelector("#c99").classList.add("exploradora");
   //quitamos la puerta cerrada
   const puertaActual = document.querySelector(".door_closed");
   puertaActual.classList.remove("door_closed");
+  //se llama a las funciones para colocar la puerta abierta y la exploradora
   colocarPuertayExploradora();
   comenzarJuego();
 }
@@ -328,21 +313,18 @@ function mensajeErroryBoton() {
   clearInterval(intervaloSerpientes);
   Swal.fire({
     title: "Has sido deborada por la serpiente!!",
-    imageUrl: "../images/serpienteComiendo.png",
+    imageUrl: "../../TareaUD5-UD6/images/serpienteComiendo.jpg",
     imageWidth: 400,
     imageHeight: 200,
     imageAlt: "Custom image",
   });
-  if (botonCreado == false) {
-    const divBoton = document.querySelector("#boton");
-    const boton = document.createElement("button");
-    boton.textContent = "Jugar de nuevo";
-    divBoton.appendChild(boton);
-    boton.addEventListener("click", reiniciarJuego);
-    botonCreado = true;
-  }
 }
 
+/**
+ * @description Funcion que comprueba si las serpientes
+ * han chocado con la exploradora o no comprobando sus
+ * posiciones
+ */
 function comprobarChoque() {
   let explActual = document.querySelector(".exploradora");
   let posicionActualExpl = explActual.getAttribute("id");
@@ -374,7 +356,34 @@ function comprobarChoque() {
     }
   });
 
+  //si choca manda mensaje de error
   if (choca) {
     mensajeErroryBoton();
   }
 }
+
+function actualizarCuenta(){
+  let segundos = 15;
+  tiempo.innerHTML = `Escapa en ${segundos} segundos`;
+  segundos--;
+  if (segundos == 0) {
+    clearInterval(intervaloSerpientes);
+    clearInterval(intervaloCronometro);
+    Swal.fire({
+      title: "Has sido deborada por la serpiente!!",
+      imageUrl: "../../TareaUD5-UD6/images/finalizado.png",
+      imageWidth: 400,
+      imageHeight: 200,
+      imageAlt: "Custom image",
+    });
+    if (botonCreado == false) {
+      const divBoton = document.querySelector("#boton");
+      const boton = document.createElement("button");
+      boton.textContent = "Jugar de nuevo";
+      divBoton.appendChild(boton);
+      boton.addEventListener("click", reiniciarJuego);
+      botonCreado = true;
+    }
+  }
+}
+
