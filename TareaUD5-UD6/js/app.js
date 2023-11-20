@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
   crearTablero(); //nada más empezar se crea el tablero
   document.addEventListener("keydown", comenzarJuego);
   intervaloSerpientes = setInterval(moverSerpientes, 1000);
-  // intervaloCronometro = setInterval(actualizarCuenta,1000);
+  intervaloCronometro = setInterval(actualizarCuenta,1000);
 
 });
 /**
@@ -370,28 +370,28 @@ function comprobarChoque() {
   }
 }
 
-// function actualizarCuenta(){
-//   let segundos = 15;
-//   tiempo.innerHTML = `Escapa en ${segundos} segundos`;
-//   segundos--;
-//   if (segundos == 0) {
-//     clearInterval(intervaloSerpientes);
-//     clearInterval(intervaloCronometro);
-//     Swal.fire({
-//       title: "Has sido deborada por la serpiente!!",
-//       imageUrl: "../../TareaUD5-UD6/images/finalizado.png",
-//       imageWidth: 400,
-//       imageHeight: 200,
-//       imageAlt: "Custom image",
-//     });
-//     if (botonCreado == false) {
-//       const divBoton = document.querySelector("#boton");
-//       const boton = document.createElement("button");
-//       boton.textContent = "Jugar de nuevo";
-//       divBoton.appendChild(boton);
-//       boton.addEventListener("click", reiniciarJuego);
-//       botonCreado = true;
-//     }
-//   }
-// }
+function actualizarCuenta(){
+  let segundos = 15;
+  tiempo.innerHTML = `Escapa en ${segundos} segundos`;
+  segundos--;
+  if (segundos == 0) {
+    clearInterval(intervaloSerpientes);
+    clearInterval(intervaloCronometro);
+    Swal.fire({
+      title: "Has sido deborada por la serpiente!!",
+      imageUrl: "../../TareaUD5-UD6/images/finalizado.png",
+      imageWidth: 400,
+      imageHeight: 200,
+      imageAlt: "Custom image",
+    });
+    if (botonCreado == false) {
+      const divBoton = document.querySelector("#boton");
+      const boton = document.createElement("button");
+      boton.textContent = "Jugar de nuevo";
+      divBoton.appendChild(boton);
+      boton.addEventListener("click", reiniciarJuego);
+      botonCreado = true;
+    }
+  }
+}
 
