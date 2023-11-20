@@ -6,7 +6,7 @@ const tablero = document.createElement("table");
 const tiempo = document.querySelector("#time");
 let aPosiciones = [];
 let intervaloSerpientes;
-// let intervaloCronometro;
+let intervaloCronometro;
 let botonCreado = false;
 document.addEventListener("DOMContentLoaded", () => {
   crearTablero(); //nada más empezar se crea el tablero
