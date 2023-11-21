@@ -8,12 +8,13 @@ let aPosiciones = [];
 let intervaloSerpientes;
 let intervaloCronometro;
 let botonCreado = false;
+let segundos;
 document.addEventListener("DOMContentLoaded", () => {
   crearTablero(); //nada más empezar se crea el tablero
   document.addEventListener("keydown", comenzarJuego);
   intervaloSerpientes = setInterval(moverSerpientes, 1000);
-  intervaloCronometro = setInterval(actualizarCuenta,1000);
-
+  segundos = 15;
+  intervaloCronometro = setInterval(actualizarCuenta, 1000);
 });
 /**
  * @description Función encargada de crear el tablero y asignar
@@ -196,12 +197,15 @@ function moverAbajo() {
 function comprobarVictoria(numPosicionNueva) {
   if (numPosicionNueva == 0) {
     clearInterval(intervaloSerpientes);
+    clearInterval(intervaloCronometro);
     const puertaActual = document.querySelector(".door_opened");
     puertaActual.classList.remove("door_opened");
     puertaActual.classList.add("door_closed");
+    let tiempoTardado = 15 - segundos;
     Swal.fire({
       title: "Enhorabuena!",
       text: "Has conseguido llegar a la puerta",
+      text: "Has tardado " + tiempoTardado + " segundos",
       imageUrl: "../../TareaUD5-UD6/images/ganadora.png",
       imageWidth: 400,
       imageHeight: 200,
@@ -231,6 +235,8 @@ function reiniciarJuego() {
   colocarSerpientes();
   // Establecer un nuevo intervalo y almacenar su ID
   intervaloSerpientes = setInterval(moverSerpientes, 1000);
+  segundos = 15; //volvemos a setear los segundos a 15
+  intervaloCronometro = setInterval(actualizarCuenta, 1000);
   //eliminamos la exploradora de donde esté y la colocamos en la celda 99
   const explActual = document.querySelector(".exploradora");
   explActual.classList.remove("exploradora");
@@ -311,6 +317,7 @@ function moverSerpientes() {
 
 function mensajeErroryBoton() {
   clearInterval(intervaloSerpientes);
+  clearInterval(intervaloCronometro);
   Swal.fire({
     title: "Has sido deborada por la serpiente!!",
     imageUrl: "../../TareaUD5-UD6/images/serpienteComiendo.jpg",
@@ -319,13 +326,13 @@ function mensajeErroryBoton() {
     imageAlt: "Custom image",
   });
   if (botonCreado == false) {
-          const divBoton = document.querySelector("#boton");
-          const boton = document.createElement("button");
-          boton.textContent = "Jugar de nuevo";
-          divBoton.appendChild(boton);
-          boton.addEventListener("click", reiniciarJuego);
-          botonCreado = true;
-        }
+    const divBoton = document.querySelector("#boton");
+    const boton = document.createElement("button");
+    boton.textContent = "Jugar de nuevo";
+    divBoton.appendChild(boton);
+    boton.addEventListener("click", reiniciarJuego);
+    botonCreado = true;
+  }
 }
 
 /**
@@ -370,8 +377,7 @@ function comprobarChoque() {
   }
 }
 
-function actualizarCuenta(){
-  let segundos = 15;
+function actualizarCuenta() {
   tiempo.innerHTML = `Escapa en ${segundos} segundos`;
   segundos--;
   if (segundos == 0) {
@@ -394,4 +400,3 @@ function actualizarCuenta(){
     }
   }
 }
-
