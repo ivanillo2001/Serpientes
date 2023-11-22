@@ -3,18 +3,24 @@
 //declaramos tablero
 const tabla = document.querySelector("#table");
 const tablero = document.createElement("table");
+//declaramos la constante tiempo, que almacenará la cuenta regresiva
 const tiempo = document.querySelector("#time");
+//declaramos el array de posiciones
 let aPosiciones = [];
+//creamos los dos intervalos. Uno es el de los movimientos de las serpientes
+//y el otro es el de la cuenta regresiva
 let intervaloSerpientes;
 let intervaloCronometro;
+//declaramos un boolean, para comprobar si se creó el botón de jugar de nuevo
 let botonCreado = false;
+//declaramos los segundos
 let segundos;
 document.addEventListener("DOMContentLoaded", () => {
   crearTablero(); //nada más empezar se crea el tablero
-  document.addEventListener("keydown", comenzarJuego);
-  intervaloSerpientes = setInterval(moverSerpientes, 1000);
-  segundos = 15;
-  intervaloCronometro = setInterval(actualizarCuenta, 1000);
+  document.addEventListener("keydown", comenzarJuego); //al pulsar la primera tecla comienza el juego
+  intervaloSerpientes = setInterval(moverSerpientes, 1000); //comienza el movimiento de serpientes
+  segundos = 14; //al empezar la cuenta tiene que empezar en 14 porque el inicial es 15
+  intervaloCronometro = setInterval(actualizarCuenta, 1000); //comienza la cuenta atras
 });
 /**
  * @description Función encargada de crear el tablero y asignar
@@ -44,7 +50,17 @@ function colocarPuertayExploradora() {
   document.querySelector("#c0").classList.add("door_opened");
   document.querySelector("#c99").classList.add("exploradora");
 }
-
+function eliminarExploradora() {
+  const explActual = document.querySelector(".exploradora");
+  explActual.classList.remove("exploradora");
+}
+/**
+ * @description Funcion colocarSerpientes() es la encargada
+ * de que cada vez que comienza el juego se coloquen las serpientes de manera aleatoria.
+ * Hacemos 3 bucles para cad tipo de serpiente y verificamos que su posición no se encuentre
+ * en el array que se declaró arriba.la posicion debe de ser entre 1 y 98, excluyendo la
+ * posicion 0, donde está la puerta y la 99 que es donde está la exploradora
+ */
 function colocarSerpientes() {
   for (let i = 0; i < 4; i++) {
     let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
@@ -72,6 +88,11 @@ function colocarSerpientes() {
   }
 }
 
+/**
+ * @description Funcion que se encarga de borrar las serpientes al reiniciar
+ * el juego. Selecciona todos los elementos que haya serpientes y les borra
+ * la clase.
+ */
 function borrarSerpientes() {
   const serpientes1 = document.querySelectorAll(".serpiente1");
   serpientes1.forEach((serpiente) => {
@@ -87,6 +108,10 @@ function borrarSerpientes() {
   });
 }
 
+/**
+ * Esta función es la que controla los movimientos de la exploradora
+ * @param {*} event keydown
+ */
 function comenzarJuego(event) {
   //añadimos eventos de flechas
   if (event.key == "ArrowLeft") {
@@ -201,7 +226,7 @@ function comprobarVictoria(numPosicionNueva) {
     const puertaActual = document.querySelector(".door_opened");
     puertaActual.classList.remove("door_opened");
     puertaActual.classList.add("door_closed");
-    let tiempoTardado = 15 - segundos;
+    let tiempoTardado = 14 - segundos;
     Swal.fire({
       title: "Enhorabuena!",
       text: "Has conseguido llegar a la puerta",
@@ -227,25 +252,25 @@ function comprobarVictoria(numPosicionNueva) {
  * borrando y añadiendo las clases necesarias
  */
 function reiniciarJuego() {
+  //eliminamos la exploradora de donde esté y la colocamos en la celda 99, y ponemos
+  //la puerta abierta
+  eliminarExploradora();
+  colocarPuertayExploradora();
   //eliminamos el intervalo de movimiento de serpientes
   clearInterval(intervaloSerpientes);
   //quitamos las serpientes de donde están
   borrarSerpientes();
   //volvemos a colocar las serpientes en sitios aleatorios
   colocarSerpientes();
-  // Establecer un nuevo intervalo y almacenar su ID
+  // Establecer un nuevo intervalo de movimiento de serpientes
   intervaloSerpientes = setInterval(moverSerpientes, 1000);
   segundos = 15; //volvemos a setear los segundos a 15
+  //Establecemos nuevo intervalo para el cronómetro
   intervaloCronometro = setInterval(actualizarCuenta, 1000);
-  //eliminamos la exploradora de donde esté y la colocamos en la celda 99
-  const explActual = document.querySelector(".exploradora");
-  explActual.classList.remove("exploradora");
-  document.querySelector("#c99").classList.add("exploradora");
   //quitamos la puerta cerrada
   const puertaActual = document.querySelector(".door_closed");
   puertaActual.classList.remove("door_closed");
-  //se llama a las funciones para colocar la puerta abierta y la exploradora
-  colocarPuertayExploradora();
+  //Comienza el juego
   comenzarJuego();
 }
 
@@ -315,6 +340,9 @@ function moverSerpientes() {
   }
 }
 
+/**
+ * @description Función que muestra el mensaje de error por haber perdido
+ */
 function mensajeErroryBoton() {
   clearInterval(intervaloSerpientes);
   clearInterval(intervaloCronometro);
@@ -377,6 +405,11 @@ function comprobarChoque() {
   }
 }
 
+/**
+ * @description Función que lleva el intervalo del cronómetro.
+ * Al llegar a 0 si la exploradora no ha llegado a la puerta
+ * muestra mensaje de error
+ */
 function actualizarCuenta() {
   tiempo.innerHTML = `Escapa en ${segundos} segundos`;
   segundos--;
