@@ -62,29 +62,15 @@ function eliminarExploradora() {
  * posicion 0, donde está la puerta y la 99 que es donde está la exploradora
  */
 function colocarSerpientes() {
-  for (let i = 0; i < 4; i++) {
-    let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
-    while (aPosiciones.includes(`c${numeroAleatorio}`)) {
-      numeroAleatorio = Math.floor(Math.random() * 97) + 2;
+  for (let id = 0; id < 4; id++) {
+    for (let index = 0; index < 4; index++) {
+      let numRandom = Math.floor(Math.random()*97)+2;
+      while (aPosiciones.includes(`c${numRandom}`)) {
+        numRandom = Math.floor(Math.random()*97)+2;
+      }
+      aPosiciones.push(`c${numRandom}`);
+      document.querySelector(`#c${numRandom}`).classList.add(`serpiente${id}`);
     }
-    aPosiciones.push(`c${numeroAleatorio}`);
-    document.querySelector(`#c${numeroAleatorio}`).classList.add("serpiente1");
-  }
-  for (let i = 0; i < 4; i++) {
-    let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
-    while (aPosiciones.includes(`c${numeroAleatorio}`)) {
-      numeroAleatorio = Math.floor(Math.random() * 97) + 2;
-    }
-    aPosiciones.push(`c${numeroAleatorio}`);
-    document.querySelector(`#c${numeroAleatorio}`).classList.add("serpiente2");
-  }
-  for (let i = 0; i < 4; i++) {
-    let numeroAleatorio = Math.floor(Math.random() * 97) + 2;
-    while (aPosiciones.includes(`c${numeroAleatorio}`)) {
-      numeroAleatorio = Math.floor(Math.random() * 97) + 2;
-    }
-    aPosiciones.push(`c${numeroAleatorio}`);
-    document.querySelector(`#c${numeroAleatorio}`).classList.add("serpiente3");
   }
 }
 
@@ -94,20 +80,13 @@ function colocarSerpientes() {
  * la clase.
  */
 function borrarSerpientes() {
-  const serpientes1 = document.querySelectorAll(".serpiente1");
-  serpientes1.forEach((serpiente) => {
-    serpiente.classList.remove("serpiente1");
-  });
-  const serpientes2 = document.querySelectorAll(".serpiente2");
-  serpientes2.forEach((serpiente) => {
-    serpiente.classList.remove("serpiente2");
-  });
-  const serpientes3 = document.querySelectorAll(".serpiente3");
-  serpientes3.forEach((serpiente) => {
-    serpiente.classList.remove("serpiente3");
-  });
+  for (let index = 1; index < 4; index++) {
+    const serpientes = document.querySelectorAll(`.serpiente${index}`);
+    serpientes.forEach((serpiente) => {
+      serpiente.classList.remove(`serpiente${index}`);
+    });
+  }
 }
-
 /**
  * Esta función es la que controla los movimientos de la exploradora
  * @param {*} event keydown
