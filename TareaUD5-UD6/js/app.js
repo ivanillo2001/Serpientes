@@ -64,9 +64,9 @@ function eliminarExploradora() {
 function colocarSerpientes() {
   for (let id = 0; id < 4; id++) {
     for (let index = 0; index < 4; index++) {
-      let numRandom = Math.floor(Math.random()*97)+2;
+      let numRandom = Math.floor(Math.random() * 97) + 2;
       while (aPosiciones.includes(`c${numRandom}`)) {
-        numRandom = Math.floor(Math.random()*97)+2;
+        numRandom = Math.floor(Math.random() * 97) + 2;
       }
       aPosiciones.push(`c${numRandom}`);
       document.querySelector(`#c${numRandom}`).classList.add(`serpiente${id}`);
@@ -225,12 +225,12 @@ function comprobarVictoria(numPosicionNueva) {
     }
   }
 }
-
 /**
  * @description Funcion para reiniciar el juego
  * borrando y añadiendo las clases necesarias
  */
 function reiniciarJuego() {
+  aPosiciones.length=0;
   //eliminamos la exploradora de donde esté y la colocamos en la celda 99, y ponemos
   //la puerta abierta
   eliminarExploradora();
@@ -258,6 +258,7 @@ function moverSerpientes() {
   const serpientes1 = document.querySelectorAll(".serpiente1");
   const serpientes2 = document.querySelectorAll(".serpiente2");
   const serpientes3 = document.querySelectorAll(".serpiente3");
+  
   for (let index = 0; index < 15; index++) {
     serpientes1.forEach((serpiente1) => {
       //obtenemos la posicion actual
@@ -350,34 +351,15 @@ function mensajeErroryBoton() {
 function comprobarChoque() {
   let explActual = document.querySelector(".exploradora");
   let posicionActualExpl = explActual.getAttribute("id");
-  let numPosExplo = parseInt(posicionActualExpl.substring(1));
   let choca = false;
-  const serpientes1 = document.querySelectorAll(".serpiente1");
-  const serpientes2 = document.querySelectorAll(".serpiente2");
-  const serpientes3 = document.querySelectorAll(".serpiente3");
-
-  serpientes1.forEach((serpiente) => {
-    let posicion = serpiente.getAttribute("id");
-    let numPosicion = parseInt(posicion.substring(1));
-    if (numPosExplo == numPosicion) {
-      choca = true;
-    }
-  });
-  serpientes2.forEach((serpiente) => {
-    let posicion = serpiente.getAttribute("id");
-    let numPosicion = parseInt(posicion.substring(1));
-    if (numPosExplo == numPosicion) {
-      choca = true;
-    }
-  });
-  serpientes3.forEach((serpiente) => {
-    let posicion = serpiente.getAttribute("id");
-    let numPosicion = parseInt(posicion.substring(1));
-    if (numPosExplo == numPosicion) {
-      choca = true;
-    }
-  });
-
+  for (let index = 1; index < 4; index++) {
+    const serpientes = document.querySelectorAll(`.serpiente${index}`);
+    serpientes.forEach((serpiente) => {
+      if (serpiente.getAttribute("id") == posicionActualExpl) {
+        choca = true;
+      }
+    });
+  }
   //si choca manda mensaje de error
   if (choca) {
     mensajeErroryBoton();
