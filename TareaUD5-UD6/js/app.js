@@ -116,7 +116,6 @@ function moverIzquierda() {
   //obtenemos posicion actual
   const explActual = document.querySelector(".exploradora");
   const posicionActual = explActual.getAttribute("id");
-
   //como es una cadena necesitamos obtener el número, por lo que hacemos un substring
   const numPosicionActual = parseInt(posicionActual.substring(1));
   //controlamos que no esté en el borde izquierdo
@@ -134,7 +133,6 @@ function moverDerecha() {
   //obtenemos posicion actual
   const explActual = document.querySelector(".exploradora");
   const posicionActual = explActual.getAttribute("id");
-
   //como es una cadena necesitamos obtener el número, por lo que hacemos un substring
   const numPosicionActual = parseInt(posicionActual.substring(1));
   //controlamos que no esté en el borde derecho
@@ -153,7 +151,6 @@ function moverArriba() {
   //obtenemos posicion actual
   const explActual = document.querySelector(".exploradora");
   const posicionActual = explActual.getAttribute("id");
-
   //como es una cadena necesitamos obtener el número, por lo que hacemos un substring
   const numPosicionActual = parseInt(posicionActual.substring(1));
   //controlamos que no esté en el borde superior
@@ -172,7 +169,6 @@ function moverAbajo() {
   //obtenemos posicion actual
   const explActual = document.querySelector(".exploradora");
   const posicionActual = explActual.getAttribute("id");
-
   //como es una cadena necesitamos obtener el número, por lo que hacemos un substring
   const numPosicionActual = parseInt(posicionActual.substring(1));
   //controlamos que no esté en el borde de abajo
