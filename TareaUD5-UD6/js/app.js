@@ -5,14 +5,17 @@ const tabla = document.querySelector("#table");
 const tablero = document.createElement("table");
 //declaramos la constante tiempo, que almacenará la cuenta regresiva
 const tiempo = document.querySelector("#time");
+//declaramos el boton
+const divBoton = document.querySelector("#boton");
+const boton = document.createElement("button");
+boton.textContent = "Jugar de nuevo";
+divBoton.appendChild(boton);
 //declaramos el array de posiciones
 let aPosiciones = [];
 //creamos los dos intervalos. Uno es el de los movimientos de las serpientes
 //y el otro es el de la cuenta regresiva
 let intervaloSerpientes;
 let intervaloCronometro;
-//declaramos un boolean, para comprobar si se creó el botón de jugar de nuevo
-let botonCreado = false;
 //declaramos los segundos
 let segundos;
 document.addEventListener("DOMContentLoaded", () => {
@@ -43,8 +46,9 @@ function crearTablero() {
   //colocamos puerta, exploradora y serpientes
   colocarPuertayExploradora();
   colocarSerpientes();
+  boton.addEventListener("click",reiniciarJuego);
+  boton.style.display="none";
 }
-
 function colocarPuertayExploradora() {
   //declaramos las imágenes que están al inicio, que son la puerta y la exploradora
   document.querySelector("#c0").classList.add("door_opened");
@@ -73,7 +77,6 @@ function colocarSerpientes() {
     }
   }
 }
-
 /**
  * @description Funcion que se encarga de borrar las serpientes al reiniciar
  * el juego. Selecciona todos los elementos que haya serpientes y les borra
@@ -106,7 +109,6 @@ function comenzarJuego(event) {
     moverAbajo();
   }
 }
-
 /**
  * @description Funciones de movimiento de exploradora
  */
@@ -119,7 +121,6 @@ function moverIzquierda() {
   const numPosicionActual = parseInt(posicionActual.substring(1));
   //controlamos que no esté en el borde izquierdo
   if (numPosicionActual % 10 !== 0) {
-    console.log(numPosicionActual);
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
     const numPosicionNueva = numPosicionActual - 1;
     const posicionNueva = "c" + numPosicionNueva;
@@ -129,7 +130,6 @@ function moverIzquierda() {
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
   }
 }
-
 function moverDerecha() {
   //obtenemos posicion actual
   const explActual = document.querySelector(".exploradora");
@@ -139,7 +139,6 @@ function moverDerecha() {
   const numPosicionActual = parseInt(posicionActual.substring(1));
   //controlamos que no esté en el borde derecho
   if (numPosicionActual % 10 !== 9) {
-    console.log(numPosicionActual);
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
     const numPosicionNueva = numPosicionActual + 1;
     const posicionNueva = "c" + numPosicionNueva;
@@ -150,7 +149,6 @@ function moverDerecha() {
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
   }
 }
-
 function moverArriba() {
   //obtenemos posicion actual
   const explActual = document.querySelector(".exploradora");
@@ -160,7 +158,6 @@ function moverArriba() {
   const numPosicionActual = parseInt(posicionActual.substring(1));
   //controlamos que no esté en el borde superior
   if (numPosicionActual >= 10) {
-    console.log(numPosicionActual);
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
     const numPosicionNueva = numPosicionActual - 10;
     const posicionNueva = "c" + numPosicionNueva;
@@ -171,7 +168,6 @@ function moverArriba() {
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
   }
 }
-
 function moverAbajo() {
   //obtenemos posicion actual
   const explActual = document.querySelector(".exploradora");
@@ -181,7 +177,6 @@ function moverAbajo() {
   const numPosicionActual = parseInt(posicionActual.substring(1));
   //controlamos que no esté en el borde de abajo
   if (numPosicionActual < 90) {
-    console.log(numPosicionActual);
     //Una vez ya tenemos la posicion, debemos calcular la nueva posicion
     const numPosicionNueva = numPosicionActual + 10;
     const posicionNueva = "c" + numPosicionNueva;
@@ -192,7 +187,6 @@ function moverAbajo() {
     document.querySelector(`#${posicionNueva}`).classList.add("exploradora");
   }
 }
-
 /**
  * @description Esta función comprueba si la posicion de
  * la exploradora es la misma que la de la puerta.
@@ -215,14 +209,8 @@ function comprobarVictoria(numPosicionNueva) {
       imageHeight: 200,
       imageAlt: "Custom image",
     });
-    if (botonCreado == false) {
-      const divBoton = document.querySelector("#boton");
-      const boton = document.createElement("button");
-      boton.textContent = "Jugar de nuevo";
-      divBoton.appendChild(boton);
-      boton.addEventListener("click", reiniciarJuego);
-      botonCreado = true;
-    }
+    boton.style.display="block";
+    eliminarExploradora();
   }
 }
 /**
@@ -230,10 +218,9 @@ function comprobarVictoria(numPosicionNueva) {
  * borrando y añadiendo las clases necesarias
  */
 function reiniciarJuego() {
+  boton.style.display="none";
   aPosiciones.length=0;
-  //eliminamos la exploradora de donde esté y la colocamos en la celda 99, y ponemos
-  //la puerta abierta
-  eliminarExploradora();
+  //colocamos puerta y exploradora
   colocarPuertayExploradora();
   //eliminamos el intervalo de movimiento de serpientes
   clearInterval(intervaloSerpientes);
@@ -249,10 +236,10 @@ function reiniciarJuego() {
   //quitamos la puerta cerrada
   const puertaActual = document.querySelector(".door_closed");
   puertaActual.classList.remove("door_closed");
+  eliminarExploradora();
   //Comienza el juego
   comenzarJuego();
 }
-
 function moverSerpientes() {
   //creamos los arrays con las diferentes serpientes
   const serpientes1 = document.querySelectorAll(".serpiente1");
@@ -319,7 +306,6 @@ function moverSerpientes() {
     });
   }
 }
-
 /**
  * @description Función que muestra el mensaje de error por haber perdido
  */
@@ -333,16 +319,8 @@ function mensajeErroryBoton() {
     imageHeight: 200,
     imageAlt: "Custom image",
   });
-  if (botonCreado == false) {
-    const divBoton = document.querySelector("#boton");
-    const boton = document.createElement("button");
-    boton.textContent = "Jugar de nuevo";
-    divBoton.appendChild(boton);
-    boton.addEventListener("click", reiniciarJuego);
-    botonCreado = true;
-  }
+  boton.style.display="block";
 }
-
 /**
  * @description Funcion que comprueba si las serpientes
  * han chocado con la exploradora o no comprobando sus
@@ -362,10 +340,10 @@ function comprobarChoque() {
   }
   //si choca manda mensaje de error
   if (choca) {
+    eliminarExploradora();
     mensajeErroryBoton();
   }
 }
-
 /**
  * @description Función que lleva el intervalo del cronómetro.
  * Al llegar a 0 si la exploradora no ha llegado a la puerta
@@ -384,13 +362,6 @@ function actualizarCuenta() {
       imageHeight: 200,
       imageAlt: "Custom image",
     });
-    if (botonCreado == false) {
-      const divBoton = document.querySelector("#boton");
-      const boton = document.createElement("button");
-      boton.textContent = "Jugar de nuevo";
-      divBoton.appendChild(boton);
-      boton.addEventListener("click", reiniciarJuego);
-      botonCreado = true;
-    }
+    boton.style.display="block";
   }
 }
